@@ -5,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp();
 
   // This widget is the root of your application.
   @override
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({required this.title});
 
   final String title;
 
@@ -75,39 +75,60 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tic Tac Toe'),
+        title: const Text('Tic Tac Toe'),
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemCount: _board.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: () {
-              if (_board[index] == '') {
-                setState(() {
-                  _board[index] = _isPlayerXTurn ? 'X' : 'O';
-                  _isPlayerXTurn = !_isPlayerXTurn;
-                });
-                // Check for winner or draw
-                checkWinner(_board[index]);
-                // Implement game logic here
-              }
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(),
-              ),
-              child: Center(
-                child: Text(
-                  _board[index],
-                  style: TextStyle(fontSize: 32.0),
+      body: Column(
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              slivers: [
+                SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (_board[index] == '') {
+                            setState(() {
+                              _board[index] = _isPlayerXTurn ? 'X' : 'O';
+                              _isPlayerXTurn = !_isPlayerXTurn;
+                            });
+                            // Check for winner or draw
+                            checkWinner(_board[index]);
+                            // Implement game logic here
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                          ),
+                          child: Center(
+                            child: Text(
+                              _board[index],
+                              style: TextStyle(fontSize: 30.0),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: _board.length,
+                  ),
                 ),
-              ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      true ? 'The Winner is $_winner': '',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
