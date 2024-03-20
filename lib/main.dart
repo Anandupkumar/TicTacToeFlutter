@@ -1,6 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Replace with your actual Firebase project configuration
+  const firebaseConfig = FirebaseOptions(
+    apiKey: "AIzaSyCfvCTqInEbYBGL9n8B6OlUd37o_ga43K4",
+    authDomain: "https://crickclub-265cd-default-rtdb.firebaseio.com",
+    projectId: "crickclub-265cd",
+    storageBucket: "crickclub-265cd.appspot.com",
+    messagingSenderId: "996731428183",
+    appId: "1:996731428183:ios:3530fee402011cbe41b212",
+  );
+
+  await Firebase.initializeApp(options: firebaseConfig);
+
   runApp(const MyApp());
 }
 
@@ -36,7 +51,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isPlayerXTurn = true;
   String _winner = '';
 
+  final database = FirebaseDatabase.instance;
+
   void checkWinner(String currentPlayer) {
+    // print(database);
     final List<List<int>> winPatterns = [
       [0, 1, 2],
       [3, 4, 5],
