@@ -54,21 +54,28 @@ class _MyHomePageState extends State<MyHomePage> {
       final c = pattern[2];
 
       if (_board[a] != '' && _board[a] == _board[b] && _board[a] == _board[c]) {
-        _winner = currentPlayer;
+        setState(() {
+          _winner = currentPlayer;
+        });
 
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Winner'),
-              content: Text('The winner is $_winner!'),
-            );
-          },
-        );
-
-        _board = List.filled(9, '');
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: const Text('Winner'),
+        //       content: Text('The winner is $_winner!'),
+        //     );
+        //   },
+        // );
       }
     }
+  }
+
+  void resetBoard() {
+    setState(() {
+      _board = List.filled(9, '');
+      _winner = '';
+    });
   }
 
   @override
@@ -107,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Center(
                             child: Text(
                               _board[index],
-                              style: TextStyle(fontSize: 30.0),
+                              style: const TextStyle(fontSize: 30.0),
                             ),
                           ),
                         ),
@@ -117,13 +124,33 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      true ? 'The Winner is $_winner': '',
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  ),
+                  child: _winner != ''
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Text(
+                                'The Winner is $_winner',
+                                style: const TextStyle(fontSize: 20.0),
+                              ),
+                            ),
+                            Container(
+                                padding: const EdgeInsets.all(20.0),
+                                child: TextButton(
+                                  style: ButtonStyle(
+                                    foregroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                            Colors.blue),
+                                  ),
+                                  onPressed: () {
+                                    resetBoard();
+                                  },
+                                  child: const Text('Reset'),
+                                )),
+                          ],
+                        )
+                      : const SizedBox(),
                 ),
               ],
             ),
