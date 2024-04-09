@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'login.dart';
+// import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_database/firebase_database.dart';
+import 'board.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Replace with your actual Firebase project configuration
-  const firebaseConfig = FirebaseOptions(
-    apiKey: "fhhfdhdfhfgfjtruery",
-    authDomain: "https://gdhgh-ththh-ht-tht.firebaseio.com",
-    projectId: "ththt-265cd",
-    storageBucket: "ththhth-hthth.ththth.com",
-    messagingSenderId: "563453453543",
-    appId: "1:gjj232gj21:ios:5434553gjfgj",
-  );
-
-  await Firebase.initializeApp(options: firebaseConfig);
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp();
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -33,9 +22,10 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        '/home': (context) => const MyHomePage(
-            title: 'Tic Tac Toe'), // Default route to the home page
-        '/': (context) => LoginPage(), // Route to the login page
+        '/borad': (context) => const MyBoardPage(
+            title: 'Tic Tac Toe',
+            username: ''), // Default route to the home page
+        '/': (context) => const LoginPage(), // Route to the login page
       },
       // home: const MyHomePage(title: 'Tic Tac Toe'),
     );
@@ -43,30 +33,22 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final database = FirebaseDatabase.instance;
-  // Access database in initState
-  late final gameRef;
-
-  @override
-  void initState() {
-    super.initState();
-    gameRef =
-        database.ref('game'); // Initialize gameRef after database is ready
-  }
-
   final TextEditingController _usernameController = TextEditingController();
 
   void doLogin(BuildContext context, username) {
-    print(gameRef);
-    if (username != '') {
-      Navigator.pushNamed(context, '/home');
+    if (username.isNotEmpty) {
+      Navigator.pushNamed(
+        context,
+        '/borad',
+        arguments: {'username': username},
+      );
     }
   }
 

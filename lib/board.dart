@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 // import 'package:firebase_core/firebase_core.dart';
 // import 'package:firebase_database/firebase_database.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({required this.title});
-
+class MyBoardPage extends StatefulWidget {
   final String title;
+  final String username;
+
+  // const MyBoardPage({super.key, required this.title, required this.username});
+  const MyBoardPage({super.key, required this.title, required this.username});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyBoardPage> createState() => _MyBoardPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyBoardPageState extends State<MyBoardPage> {
   // String output = "0";
   List<String> _board = List.filled(9, '');
   bool _isPlayerXTurn = true;
@@ -64,9 +66,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final Map<String, dynamic>? args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+
+    // Check if args is not null before accessing its values
+    final String username = args?['username'] ?? '';
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tic Tac Toe'),
+        title: Text('Welcome, $username'),
       ),
       body: Column(
         children: [
